@@ -3,29 +3,28 @@ package net.fabricmc.effcts;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.effect.*;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.server.world.ServerWorld;
 
 public class loot extends InstantStatusEffect {
     public loot() {
         super(StatusEffectCategory.BENEFICIAL, 0x0b6138);
     }
 
-    @Override//这个是瞬间效果
+    @Override
     public boolean isInstant() {
-        return false;//此处代表此效果不为瞬间效果
+        return false;
     }
 
-    @Override//是否是随时可以生效的
+    @Override
     public boolean canApplyUpdateEffect(int duration, int amplifier) {
         return true;
     }
 
-    @Override//此处应是关于药水效果
-    public void applyUpdateEffect(LivingEntity entity, int amplifier) {
-        if(entity instanceof PlayerEntity player)
-            //player.removeStatusEffect(StatusEffects.POISON);//教程中的“删除中毒效果”
+    @Override
+    public boolean applyUpdateEffect(ServerWorld world, LivingEntity entity, int amplifier) {
+        if (entity instanceof PlayerEntity player)
+            player.addStatusEffect(new StatusEffectInstance(StatusEffects.BAD_OMEN));
 
-            player.addStatusEffect(new StatusEffectInstance(StatusEffects.BAD_OMEN));//此处添加了一个”不详之兆“效果
-
-        super.applyUpdateEffect(entity, amplifier);
+        return super.applyUpdateEffect(world, entity, amplifier);
     }
 }
